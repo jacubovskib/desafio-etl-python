@@ -90,3 +90,4 @@ output
 
 # batect
 .batect/caches/key
+resources
