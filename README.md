@@ -7,8 +7,6 @@ Este projeto é uma solução de ETL (Extract, Transform, Load) utilizando PySpa
 A estrutura de diretórios do projeto é organizada da seguinte forma:
 
 ```
-É necessario criar as pastas output e resources/input-data e incluir os arquivos.
-
 etl-spark/
 ├── app/
 │   ├── __init__.py
@@ -25,20 +23,7 @@ etl-spark/
 │   ├── transformations/
 |   ├───── taxi_ride.py          # Contém a classe com as transformações de dados
 │   ├── writers/
-|   ├───── writer.py   
-├── resources/
-│   ├── input-data/             # Dados de entrada em formato JSON
-├── output/                     # Pasta que armazena o resultado
-├── dist/                       # Pacote distribuível (construído com poetry)
-├── .gitignore                  # Especifica quais arquivos e/ou diretorios a serem ignorados
-├── pyproject.toml              # Dependências do projeto gerenciadas pelo Poetry
-├── .gitpod.Dockerfile          # arquivo usado no ambiente de desenvolvimento Gitpod para personalizar a imagem Docker
-├── .gitpod.yaml                # O arquivo para configurar o ambiente de desenvolvimento no Gitpod
-├── .pylintrc                   # Arquivo de configuração do Lint
-├── README.md                   # Documentação do projeto
-
-└── requirements.txt            # Dependências do projeto
-
+└───────── writer.py   
 ```
 
 ## Dependências
@@ -51,48 +36,106 @@ Este projeto utiliza as seguintes bibliotecas e ferramentas:
 - **Poetry** (para gerenciamento de dependências)
 - **pytest** (para testes unitários)
 - **Java 11+** 
-  
-Instale as dependências com Poetry:
+
+## Makefile
+
+
+#### `make setup`
+
+Executa o processo de configuração inicial do ambiente. Este comando realiza as seguintes tarefas:
+
+1. Torna o script `setup/setup.sh` executável (`chmod +x`).
+2. Executa o script `setup/setup.sh`, que:
+   - Verifica e cria os diretórios necessários (`output` e `resources/input-data`).
+   - Verifica se o `Poetry` está instalado, e caso não esteja, realiza sua instalação.
+3. Após o setup inicial, chama o comando `make install` para instalar as dependências do projeto usando o `Poetry`.
+
+#### `make install`
+
+Instala todas as dependências do projeto especificadas no arquivo `pyproject.toml` utilizando o gerenciador de dependências `Poetry`.
+
+#### `make test`
+
+Executa os testes unitários utilizando o `pytest`. Este comando garante que o ambiente esteja configurado corretamente antes de executar o pipeline ETL ou realizar outros desenvolvimentos no projeto.
+
+#### `make build`
+
+Constrói o pacote distribuível do projeto utilizando o `Poetry`. Isso cria um pacote `.whl` e um arquivo `.tar.gz` que podem ser distribuídos ou instalados em outros ambientes.
+
+#### `make run`
+
+Executa o pipeline ETL usando `spark-submit`. Este comando requer quatro parâmetros nomeados: `input`, `output` e `appName`. Esses parâmetros são usados para configurar o caminho dos dados de entrada e saída, o nome do aplicativo Spark.
+
+**Parâmetros:**
+- `input`: Caminho dos dados de entrada.
+- `output`: Caminho dos dados de saída.
+- `appName`: Nome do aplicativo Spark.
+
+Se algum desses parâmetros não for fornecido, o comando será interrompido com uma mensagem de erro.
+
+**Exemplo de Uso:**
 
 ```bash
-poetry install
+make run input=/caminho/para/input-data/*.json output=/caminho/para/output-data appName=MyAppName master=local
 ```
 
-## Como Executar o Projeto
+Esse comando executará as seguintes etapas:
 
-### 1. Executando com Spark-Submit
+1. Realizará o build do pacote utilizando o comando `poetry build`.
+2. Executará o `spark-submit` com os parâmetros especificados, incluindo:
+   - `input`: caminho dos dados de entrada.
+   - `output`: caminho dos dados de saída.
+   - `appName`: nome do aplicativo Spark.
 
-Para rodar o processo ETL via `spark-submit`, você pode utilizar o seguinte comando:
+#### `make clean`
 
-```bash
-poetry build && poetry run spark-submit \
-    --master local \
-    --py-files "dist/etl_spark-*.whl" \
-    app/main.py \
-    /caminho/para/input-data/*.json \
-    /caminho/para/output-data \
-    "Nome da Aplicação"
-```
+Remove arquivos temporários gerados durante o processo de build ou execução do projeto, como:
 
-Esse comando:
-- Compila o pacote PySpark (`etl_spark-*.whl`) usando o Poetry.
-- Usa o `spark-submit` para rodar o script `main.py`, que executa o pipeline de ETL.
-- Processa os arquivos de entrada na pasta especificada (`input-data`) e escreve os resultados na pasta de saída (`output-data`).
+- Diretórios `dist/` e `build/`
+- Diretórios de cache Python como `__pycache__/`
 
-### 2. Executando Testes
+Este comando é útil para garantir que o ambiente esteja limpo antes de executar novas builds ou testes.
 
-Os testes de unidade e integração foram implementados utilizando o framework `pytest`. Para executar os testes, utilize o seguinte comando:
+#### `make help`
 
-```bash
-poetry run pytest app/tests/integration  
+Lista todos os comandos disponíveis no `Makefile` com uma breve descrição de cada um, para ajudar a entender como utilizá-los.
 
-poetry run pytest app/tests/unit  
-```
+---
 
-Os testes verificam as principais transformações e agregações do projeto para garantir que os resultados estejam corretos.
+### Exemplo de Uso
 
-## Estrutura de Transformações
+1. Para configurar o ambiente de desenvolvimento, execute:
 
-As transformações de dados estão encapsuladas na classe `TaxiRide`, localizada em `app/transformations/taxi_ride.py`. A classe contém métodos responsáveis por adicionar colunas de ano e semana, calcular o fornecedor com mais viagens por ano, identificar a semana com mais viagens e calcular quantas viagens o fornecedor principal fez na semana principal.
+   ```bash
+   make setup
+   ```
 
-O pipeline de transformação completo é executado através do método `transform()`.
+2. Para instalar as dependências, execute:
+
+   ```bash
+   make install
+   ```
+
+3. Para executar os testes:
+
+   ```bash
+   make test
+   ```
+
+4. Para realizar o build do pacote:
+
+   ```bash
+   make build
+   ```
+
+5. Para executar o pipeline ETL:
+
+   ```bash
+   make run input="/caminho/para/input-data/*.json" output="/caminho/para/output-data" appName="MyAppName"
+   ```
+
+6. Para limpar os arquivos temporários gerados:
+
+   ```bash
+   make clean
+   ```

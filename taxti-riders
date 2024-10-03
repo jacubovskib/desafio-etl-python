@@ -54,3 +54,11 @@ INFO:root:App name: ETL PySpark Desafio
 INFO:root:Spark session created: myapp
 INFO:root:Stopping the application
 INFO:py4j.clientserver:Closing down clientserver connection
+INFO:root:Arguments: ['/home/nobre/workspace/etl-spark/app/main.py', '/home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2009.json', '/home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2010.json', '/home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2011.json', '/home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2012.json', '/home/nobre/workspace/etl-spark/output', 'App'], lenth: 7
+INFO:root:Starting the application
+INFO:root:Input path: /home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2009.json
+INFO:root:Output path: /home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2010.json
+INFO:root:App name: /home/nobre/workspace/etl-spark/resources/input-data/data-nyctaxi-trips-2011.json
+INFO:root:Spark session created: myapp
+INFO:root:Stopping the application
+INFO:py4j.clientserver:Closing down clientserver connection
