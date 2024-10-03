@@ -7,6 +7,7 @@ Este projeto é uma solução de ETL (Extract, Transform, Load) utilizando PySpa
 A estrutura de diretórios do projeto é organizada da seguinte forma:
 
 ```
+É necessario criar as pastas output e resources/input-data e incluir os arquivos.
 
 etl-spark/
 ├── app/
