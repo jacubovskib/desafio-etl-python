@@ -10,6 +10,7 @@ Este projeto é uma solução de ETL (Extract, Transform, Load) utilizando PySpa
 A estrutura de diretórios do projeto é organizada da seguinte forma:
 
 ```
+
 etl-spark/
 ├── app/
 │   ├── __init__.py
@@ -26,6 +27,7 @@ etl-spark/
 ├── pyproject.toml              # Dependências do projeto gerenciadas pelo Poetry
 ├── README.md                   # Documentação do projeto
 └── requirements.txt            # Dependências do projeto
+
 ```
 
 ## Dependências
