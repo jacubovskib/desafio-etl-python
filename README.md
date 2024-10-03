@@ -66,10 +66,11 @@ Para rodar o processo ETL via `spark-submit`, você pode utilizar o seguinte com
 ```bash
 poetry build && poetry run spark-submit \
     --master local \
-    --py-files dist/etl_spark-*.whl \
+    --py-files "dist/etl_spark-*.whl" \
     app/main.py \
     /caminho/para/input-data/*.json \
-    /caminho/para/output-data
+    /caminho/para/output-data \
+    "Nome da Aplicação"
 ```
 
 Esse comando:
