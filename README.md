@@ -1,6 +1,3 @@
-Claro! Aqui está o `README.md` formatado em Markdown:
-
-```markdown
 # ETL com PySpark
 
 Este projeto é uma solução de ETL (Extract, Transform, Load) utilizando PySpark. O objetivo é processar dados de viagens de táxi em Nova York, realizando agregações e transformações para extrair insights, como identificar o fornecedor com o maior número de viagens e a semana com o maior número de viagens.
