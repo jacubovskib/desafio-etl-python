@@ -6,8 +6,10 @@ Repositório do desafio ETL Spark
 ```bash
 poetry build && poetry run spark-submit \
     --master local \
-    --py-files dist/etl-spark-*.whl \
+    --py-files "dist/etl-spark-*.whl" \
     app/main.py \
     /home/nobre/workspace/etl-spark/resources/input-data/*.json \
-    /home/nobre/workspace/etl-spark/resources/output-data
+    /home/nobre/workspace/etl-spark/output \
+    "ETL PySpark Desafio"
 ```
+

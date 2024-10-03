@@ -2,8 +2,8 @@ import logging
 import sys
 
 from pyspark.sql import SparkSession
-from app.jobs.spark_job import SparkJob
-from app.transformations.taxi_ride import transformation
+from jobs.spark_job import SparkJob
+from transformations.taxi_ride import TaxiRide
 
 LOG_FILENAME = "taxti-riders"
 
@@ -19,6 +19,9 @@ if __name__ == "__main__":
     output_path = args[2]
     app_name = args[3]
 
+    logging.info(f"Input path: {input_path}")
+    logging.info(f"Output path: {output_path}")
+    logging.info(f"App name: {app_name}")
     
     spark = SparkSession.builder.appName("myapp").getOrCreate()
 
@@ -28,7 +31,7 @@ if __name__ == "__main__":
             input_path=input_path,
             output_path=output_path,
             logging=logging,
-            transformation=transformation)\
+            TransformationClass=TaxiRide)\
         .run()
 
     logging.info("Stopping the application")
