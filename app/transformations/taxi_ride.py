@@ -35,5 +35,7 @@ def transformation(input_df: DataFrame) -> DataFrame:
         .groupBy("vendor_id", "year", "week") \
         .agg(count("*").alias("vendor_trips_in_top_week"))
 
+
+    vendor_top_week_df.show()
     # Return DataFrame to be written
     return vendor_top_week_df

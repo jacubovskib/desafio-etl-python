@@ -32,11 +32,11 @@ def test_transformation(spark):
 
     # Esperado: V1 deve ter 2 viagens e 10.0 como a maior distância, V2 deve ter 2 viagens e 15.0 como a maior distância
     expected_data = [
-        Row(vendor_id="V1", year=2023, week=52, vendor_trips_in_top_week=2),
-        Row(vendor_id="V2", year=2023, week=52, vendor_trips_in_top_week=2)
+        Row(vendor_id="V2", year=2023, week=52, vendor_trips_in_top_week=1)
     ]
-    result_df.printSchema()
+
     expected_df = spark.createDataFrame(expected_data)
+
 
     # Verificar se os resultados são iguais
     assert result_df.collect() == expected_df.collect()

@@ -2,9 +2,10 @@ import logging
 import sys
 
 from pyspark.sql import SparkSession
+from app.jobs.spark_job import SparkJob
+from app.transformations.taxi_ride import transformation
 
-
-LOG_FILENAME = ""
+LOG_FILENAME = "taxti-riders"
 
 
 if __name__ == "__main__":
@@ -20,6 +21,15 @@ if __name__ == "__main__":
 
     
     spark = SparkSession.builder.appName("myapp").getOrCreate()
-    spark.stop()
+
+    SparkJob()\
+        .configure(
+            app_name=app_name,
+            input_path=input_path,
+            output_path=output_path,
+            logging=logging,
+            transformation=transformation)\
+        .run()
+
     logging.info("Stopping the application")
     sys.exit(0)

@@ -14,7 +14,7 @@ class SparkJob:
         self.input_path = None
         self.app_name = None
 
-    def configure(self, app_name: str, input_path: str, output_path: str, logging, transformation) -> None:
+    def configure(self, app_name: str, input_path: str, output_path: str, logging, transformation):
         self.app_name = app_name
         self.input_path = input_path
         self.output_path = output_path
@@ -30,6 +30,8 @@ class SparkJob:
         # Initializes the Reader and WWriter Classes
         self.reader.config(self.spark, self.input_path)
         self.writer.config(self.spark, self.output_path)
+        
+        return self
 
     def run(self):
          # Read Json files
@@ -41,6 +43,7 @@ class SparkJob:
         # Writing to csv file
         self.writer.csv(to_write_df)
 
+        self.stop()
 
     def stop(self):
         self.spark.stop()
