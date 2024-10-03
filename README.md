@@ -11,18 +11,31 @@ A estrutura de diretórios do projeto é organizada da seguinte forma:
 etl-spark/
 ├── app/
 │   ├── __init__.py
-│   ├── main.py                # Script principal que executa o processo de ETL
-│   └── transformations.py      # Contém a classe com as transformações de dados
+│   ├── jobs/
+|   ├───── spark_job.py          # Script principal que executa o processo de ETL
+│   ├── readers/
+|   ├───── reader.py             # Classe que implementa um leitor de arquivos json
+│   ├── tests/
+|   ├───── integration/
+├   ├────────── test_taxi_ride_integration.py            # Teste de integração 
+├   ├────────── test_validate_spark_environment.py       # Teste de integração para o environment.
+|   ├───── unit/                                         
+├   ├────────── test_taxi_ride.py                        # Teste de unidade para classe de transformação
+│   ├── transformations/
+|   ├───── taxi_ride.py          # Contém a classe com as transformações de dados
+│   ├── writers/
+|   ├───── writer.py   
 ├── resources/
 │   ├── input-data/             # Dados de entrada em formato JSON
-│   └── output-data/            # Dados de saída processados
-├── tests/
-│   ├── __init__.py
-│   ├── test_transformations.py  # Testes unitários para validação das transformações
+├── output/                     # Pasta que armazena o resultado
 ├── dist/                       # Pacote distribuível (construído com poetry)
-├── Dockerfile                  # Configuração para o container Docker
+├── .gitignore                  # Especifica quais arquivos e/ou diretorios a serem ignorados
 ├── pyproject.toml              # Dependências do projeto gerenciadas pelo Poetry
+├── .gitpod.Dockerfile          # arquivo usado no ambiente de desenvolvimento Gitpod para personalizar a imagem Docker
+├── .gitpod.yaml                # O arquivo para configurar o ambiente de desenvolvimento no Gitpod
+├── .pylintrc                   # Arquivo de configuração do Lint
 ├── README.md                   # Documentação do projeto
+
 └── requirements.txt            # Dependências do projeto
 
 ```
@@ -31,22 +44,17 @@ etl-spark/
 
 Este projeto utiliza as seguintes bibliotecas e ferramentas:
 
-- **Python 3.9+**
-- **Apache Spark 3.2.0**
-- **PySpark**
+- **Python 3.11+**
+- **Apache Spark 3.5.1**
+- **PySpark  3.5.1**
 - **Poetry** (para gerenciamento de dependências)
 - **pytest** (para testes unitários)
+- **Java 11+** (para testes unitários)
   
 Instale as dependências com Poetry:
 
 ```bash
 poetry install
-```
-
-Ou utilizando o `requirements.txt`:
-
-```bash
-pip install -r requirements.txt
 ```
 
 ## Como Executar o Projeto
@@ -74,34 +82,15 @@ Esse comando:
 Os testes de unidade e integração foram implementados utilizando o framework `pytest`. Para executar os testes, utilize o seguinte comando:
 
 ```bash
-poetry run pytest tests/
+poetry run pytest app/tests/integration  
+
+poetry run pytest app/tests/unit  
 ```
 
 Os testes verificam as principais transformações e agregações do projeto para garantir que os resultados estejam corretos.
 
-### 3. Docker (Opcional)
-
-Para rodar o projeto dentro de um container Docker, você pode utilizar o `Dockerfile` incluído. Construa a imagem com o seguinte comando:
-
-```bash
-docker build -t etl-spark .
-```
-
-Depois, rode o container:
-
-```bash
-docker run --rm -v $(pwd):/app etl-spark
-```
-
 ## Estrutura de Transformações
 
-As transformações de dados estão encapsuladas na classe `TripTransformation`, localizada em `app/transformations.py`. A classe contém métodos responsáveis por adicionar colunas de ano e semana, calcular o fornecedor com mais viagens por ano, identificar a semana com mais viagens e calcular quantas viagens o fornecedor principal fez na semana principal.
+As transformações de dados estão encapsuladas na classe `TaxiRide`, localizada em `app/transformations/taxi_ride.py`. A classe contém métodos responsáveis por adicionar colunas de ano e semana, calcular o fornecedor com mais viagens por ano, identificar a semana com mais viagens e calcular quantas viagens o fornecedor principal fez na semana principal.
 
 O pipeline de transformação completo é executado através do método `transform()`.
-
-## Contribuição
-
-Se desejar contribuir para o projeto, sinta-se à vontade para abrir um Pull Request ou relatar problemas através da seção de Issues.
-```
-
-Você pode copiar e colar este texto em um arquivo `README.md` no seu projeto. Se precisar de mais ajustes, é só avisar!
