@@ -49,7 +49,7 @@ Este projeto utiliza as seguintes bibliotecas e ferramentas:
 - **PySpark  3.5.1**
 - **Poetry** (para gerenciamento de dependências)
 - **pytest** (para testes unitários)
-- **Java 11+** (para testes unitários)
+- **Java 11+** 
   
 Instale as dependências com Poetry:
 
